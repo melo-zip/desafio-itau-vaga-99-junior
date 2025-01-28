@@ -1,5 +1,6 @@
 package com.example.desafio_backend_itau.services;
 
+import com.example.desafio_backend_itau.exceptions.ValidationException;
 import com.example.desafio_backend_itau.helpers.TransactionValidator;
 import com.example.desafio_backend_itau.models.TransactionModel;
 import com.example.desafio_backend_itau.repositories.TransactionRepository;
@@ -13,18 +14,19 @@ public class TransactionService implements TransactionValidator {
     @Autowired
     private TransactionRepository repository;
 
-    public TransactionModel createTransaction(TransactionModel transactionModel) {
-            if(!validate(transactionModel)){
-                    throw new IllegalArgumentException();
-            }
-        return repository.addTransaction(transactionModel);
+    public void createTransaction(TransactionModel transactionModel) {
+        List<String> errors = validate(transactionModel);
+        if(!errors.isEmpty()){
+            throw new ValidationException(errors);
+        }
+        repository.addTransaction(transactionModel);
     }
 
-    public List<TransactionModel> getTransactions(){
+    public List<TransactionModel> getTransactions() {
         return repository.getTransactions();
     }
 
-    public void deleteTransactions(){
+    public void deleteTransactions() {
         repository.deleteTransactions();
     }
 }
