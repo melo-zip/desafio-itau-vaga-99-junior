@@ -1,6 +1,7 @@
 package com.example.desafio_backend_itau.controllers;
 
 import com.example.desafio_backend_itau.dtos.TransactionRecordDto;
+import com.example.desafio_backend_itau.exceptions.ValidationException;
 import com.example.desafio_backend_itau.models.TransactionModel;
 import com.example.desafio_backend_itau.services.TransactionService;
 import jakarta.validation.Valid;
@@ -18,15 +19,15 @@ public class TransactionController {
     private TransactionService service;
 
     @PostMapping("/transaction")
-    public ResponseEntity<TransactionModel> createTransaction(@RequestBody @Valid TransactionRecordDto transactionRecordDto){
+    public ResponseEntity<Object> createTransaction(@RequestBody @Valid TransactionRecordDto transactionRecordDto){
         TransactionModel transactionModel = new TransactionModel();
         BeanUtils.copyProperties(transactionRecordDto, transactionModel);
         try {
             service.createTransaction(transactionModel);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(null);
+            return ResponseEntity.status(HttpStatus.OK).body(null);
+        } catch (ValidationException e) {
+            return ResponseEntity.status(e.getErrorCode()).body(e.getErrors());
         }
-        return ResponseEntity.status(HttpStatus.OK).body(null);
     }
 
     @GetMapping("/transaction")
