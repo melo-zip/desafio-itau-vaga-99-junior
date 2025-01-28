@@ -14,9 +14,8 @@ public class TransactionRepository {
         return transactions;
     }
 
-    public TransactionModel addTransaction(TransactionModel transactionModel) {
+    public void addTransaction(TransactionModel transactionModel) {
         transactions.add(transactionModel);
-        return transactionModel;
     }
 
     public void deleteTransactions(){
