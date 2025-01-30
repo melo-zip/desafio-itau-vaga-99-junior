@@ -6,6 +6,14 @@ public class TransactionModel {
     private Double value;
     private OffsetDateTime time;
 
+    public TransactionModel() {
+    }
+
+    public TransactionModel(Double value, OffsetDateTime time) {
+        this.value = value;
+        this.time = time;
+    }
+
     public Double getValue() {
         return value;
     }
