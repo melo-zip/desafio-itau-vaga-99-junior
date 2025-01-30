@@ -10,11 +10,15 @@ public interface TransactionValidator {
     default List<String> validate(TransactionModel transactionModel){
         List<String> errors = new ArrayList<>();
 
-        if (transactionModel.getValue() < 0) {
-            errors.add("Transaction value cannot be negative.");
-        }
-        if (transactionModel.getTime().isAfter(OffsetDateTime.now())) {
-            errors.add("Transaction time cannot be in the future.");
+        try {
+            if (transactionModel.getValue() < 0) {
+                errors.add("Transaction value cannot be negative.");
+            }
+            if (transactionModel.getTime().isAfter(OffsetDateTime.now())) {
+                errors.add("Transaction time cannot be in the future.");
+            }
+        } catch (NullPointerException e) {
+            errors.add("Fields cannot be null");
         }
 
         return errors;
